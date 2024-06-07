@@ -27,7 +27,11 @@ There are multiple entities (TODO: usertypes?):
 
 Every `Account` is opened from a `Contract`, and is attached to a `Consumer`
 
-Every `Consumer` has possible `NameLead`s, `AddressLead`s, and `SSNLeads` (TODO: add support for email, phone, etc), and if one data is verified to be the exact match, it can be set on the `Consumer`
+Every `Consumer` can have multiple `AddressLead`s (TODO: add email, phone, etc)
+
+`Contract` can be thought of as a many-to-many table w/extra data joining `Agency` / `Client`
+
+`Account` can be thought of as a many-to-many table w/extra data joining `Contract` / `Consumer`
 
 ## Branches
 
