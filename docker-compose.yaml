@@ -1,0 +1,56 @@
+name: collections
+
+services:
+  # TODO: separate out database service into separate compose file
+  col_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5499:5432"
+    volumes:
+      - ./data/col/postgres/:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    networks:
+      - col
+
+  col_api:
+    build:
+      context: src
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/code
+    ports:
+      - "8999:8000"
+    environment:
+      - DJANGO_SETTINGS=local
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - DJANGO_SECRET_KEY=value
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_HOST_IP=col_db
+    networks:
+      - col
+
+  # TODO: implement react front-end
+  # col_web:
+  #   build:
+  #     context: web
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./web:/app
+  #   ports:
+  #     - "8089:80"
+  #   networks:
+  #     - col
+
+networks:
+  col:
+    name: col
