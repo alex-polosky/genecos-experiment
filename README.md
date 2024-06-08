@@ -25,13 +25,30 @@ There are multiple entities (TODO: usertypes?):
 
 `Agency`s contract work out to `Client`s, via a `Contract`
 
-Every `Account` is opened from a `Contract`, and is attached to a `Consumer`
+Every `Account` is opened from a `Contract`
+
+Every `Account` can have multiple `Consumer`s through `AccountConsumer`
 
 Every `Consumer` can have multiple `AddressLead`s (TODO: add email, phone, etc)
 
-`Contract` can be thought of as a many-to-many table w/extra data joining `Agency` / `Client`
+## Sensitive data
 
-`Account` can be thought of as a many-to-many table w/extra data joining `Contract` / `Consumer`
+Need to find a way to sensitively store SSN and other PII
+
+Add hashing for lookups
+
+Best bet is to encrypt with a key loaded in the env; perfect would be creating a custom field
+
+Found a few packages that -might- work, but everything's woefully out of date
+ - https://github.com/chrisclark/django-cryptography
+
+---
+
+We're going to store the SSNs encrypted by:
+`Fernet(key).encrypt(hex(int(ssn.replace('-', '')))[2:].encode())`
+
+Decrypt:
+`int(Fernet(key).decrypt(ssn), 16)` followed by some string manipulation to get the hyphons back
 
 ## Branches
 
@@ -53,3 +70,11 @@ drf / ninja won't be looked at until I get a different front end put on
     - on one hand, ease of programming
     - on other hand, could break db if not ready?
     - on original hand, that's the whole point of migrations and test scripts??
+- implement ssn decryption
+- implement on the fly encrypt / decrypt for ssn
+- expand consumer name information
+- add per-consumer debt collected information on accountconsumer
+- logging actions on accounts / consumers
+- expand address information
+    - currently there's formats that I haven't even seen (ships in the middle of Iowa?)
+    - perfected address parsing is a -hard- problem anyways and should be solved by a 3rd party solution, unless that's what we're solving

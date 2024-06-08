@@ -1,3 +1,6 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
 Table agency {
   id integer [primary key]
 }
@@ -21,8 +24,13 @@ Table consumer {
 
 Table con_account {
   id integer [primary key]
-  consumer_id integer
   contract_id integer
+}
+
+Table con_accountconsumer {
+  id integer [primary key]
+  consumer_id integer
+  account_id integer
 }
 
 Table con_address {
@@ -30,7 +38,10 @@ Table con_address {
   consumer_id integer
 }
 
-Ref: con_account.consumer_id < consumer.id
+// Ref: con_account.consumer_id <> consumer.id
+Ref: con_accountconsumer.consumer_id < consumer.id
+Ref: con_accountconsumer.account_id < con_account.id
+
 Ref: consumer.id > con_address.consumer_id
 
 Ref: con_account.contract_id < contract.id
