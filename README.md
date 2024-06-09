@@ -99,3 +99,4 @@ Found a few packages that -might- work, but everything's woefully out of date
 - !! ensure that a contract exists for the ingestion !!
 - ! different user types for use with the token, and actual permissions
     - IE only agencies should be able to drop new ingest files into the api
+- ! setup database capable testing
