@@ -8,4 +8,6 @@ class Consumer(BaseModel):
 
     # TODO: implement encryption / decryption on-the-fly for this
     ssn = models.CharField(max_length=100)
-    ssn_hash = models.CharField(max_length=32, help_text='SHA 256 hash digest of ssn')
+    ssn_hash = models.CharField(max_length=64, help_text='base64 repr of SHA 256 hash digest of ssn')
+
+    # TODO: possible extra data (ie: aliases, phones, emails)

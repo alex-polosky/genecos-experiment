@@ -1,0 +1,70 @@
+[
+{
+    "model": "geneco.agency",
+    "pk": 1,
+    "fields": {
+        "pubk": "00000000-0000-0000-0001-000000000001",
+        "created": "2024-06-08T18:53:19.767Z",
+        "updated": "2024-06-08T18:55:42.317Z",
+        "name": "GeneCo Repo Men"
+    }
+},
+{
+    "model": "geneco.client",
+    "pk": 1,
+    "fields": {
+        "pubk": "00000000-0000-0000-0002-000000000001",
+        "created": "2024-06-08T18:54:52.238Z",
+        "updated": "2024-06-08T18:55:52.969Z",
+        "name": "GeneCo Organ Emporium"
+    }
+},
+{
+    "model": "geneco.contract",
+    "pk": 1,
+    "fields": {
+        "pubk": "00000000-0000-0000-0003-000000000001",
+        "created": "2024-06-08T18:55:30.405Z",
+        "updated": "2024-06-08T18:55:30.405Z",
+        "agency": 1,
+        "client": 1
+    }
+},
+{
+    "model": "geneco.consumer",
+    "pk": 1,
+    "fields": {
+        "pubk": "00000000-0000-0000-0010-000000000001",
+        "created": "2024-06-09T04:01:29.798Z",
+        "updated": "2024-06-09T04:01:29.798Z",
+        "full_name": "Christopher Harrison",
+        "ssn": "gAAAAABmZQ6pup7xvoFaX-_O52ZhAAiLOsNvFEJ9cntIxDjRRD7SRjbvWwVWuPQxJXycGKOfSSyUtM3QgXDUdfR_UhFFeLSjtg==",
+        "ssn_hash": "9nIs8Q_xdceecRBOcbH2pESSQ9R9ldNJMaBB2kVC57w="
+    }
+},
+{
+    "model": "geneco.consumer",
+    "pk": 2,
+    "fields": {
+        "pubk": "00000000-0000-0000-0010-000000000002",
+        "created": "2024-06-09T04:01:29.802Z",
+        "updated": "2024-06-09T04:01:29.802Z",
+        "full_name": "Heather Nelson",
+        "ssn": "gAAAAABmZQ70nfWHGx4WCL0bDH2fTMA0NwcuURgVn2HoHlCQPmXlwh19R_So71IiJpk9eqnb8NF9Bp6cEY8PgtJwxiza8KheKg==",
+        "ssn_hash": "Qr0mvokGKW328Pkmot-sV2Ik2LQySq6leP7AdCYZJp4="
+    }
+},
+{
+    "model": "geneco.addresslead",
+    "pk": 1,
+    "fields": {
+        "pubk": "00000000-0000-0000-0020-000000000001",
+        "created": "2024-06-09T04:01:29.807Z",
+        "updated": "2024-06-09T04:01:29.807Z",
+        "consumer": 2,
+        "reported": "2024-02-09T04:01:29.807Z",
+        "line1": "3719 Daniel Point Apt. 234",
+        "line2": "Lake Jaredborough, SD 04725"
+    }
+}
+]

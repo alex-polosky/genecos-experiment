@@ -1,4 +1,7 @@
+import base64
 import os
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -7,6 +10,14 @@ ALLOWED_HOSTS = [
 ]
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
+FERNET_KEY = base64.urlsafe_b64encode(
+    PBKDF2HMAC(
+        algorithm=hashes.SHA512(),
+        length=32,
+        salt=b'',
+        iterations=480000
+    ).derive(SECRET_KEY.encode())
+)
 
 APPEND_SLASH = False
 
@@ -17,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'geneco'
 ]
 
@@ -73,6 +85,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/django/static/'

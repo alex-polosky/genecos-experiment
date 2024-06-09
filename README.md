@@ -14,7 +14,23 @@
 
 `docker compose exec -it col_api python manage.py createsuperuser`
 
+`docker compose exec -it col_api python manage.py loaddata initial-data`
+
+## Running commands
+
+### Admin console
+
 Open [the server page](http://localhost:8999/admin/) to view the admin dash!
+
+### Loading consumers balances test data
+
+`cp /path/to/consumers_balances.csv ./data/consumers_balances.csv`
+
+`curl -X post http://localhost:8999/api/v1/token/ -d "username=insert_user_from_above&password=insert_pw_from_above"`
+
+Note the token value
+
+`curl -X put -H "Authorization: Token $TOKEN" http://localhost:8999/api/v1/contract/00000000-0000-0000-0003-000000000001/ingest/ --form 'file=@"data/consumers_balances.csv"'`
 
 ## Relation setup
 
@@ -42,39 +58,40 @@ Best bet is to encrypt with a key loaded in the env; perfect would be creating a
 Found a few packages that -might- work, but everything's woefully out of date
  - https://github.com/chrisclark/django-cryptography
 
----
-
-We're going to store the SSNs encrypted by:
-`Fernet(key).encrypt(hex(int(ssn.replace('-', '')))[2:].encode())`
-
-Decrypt:
-`int(Fernet(key).decrypt(ssn), 16)` followed by some string manipulation to get the hyphons back
-
-## Branches
-
-Currently there are four branches:
-- main
-    - This is the current best version of the code
-- django
-    - Django only version
-- drf
-    - Api built with [django-rest-framework](https://www.django-rest-framework.org/)
-- ninja
-    - Api built with [django-ninja](https://django-ninja.dev/), which is a newer framework I came across that looks easier to spin up than drf, so I want to check it out ([also similar to something I built for Clubcard back in the day](https://github.com/alex-polosky/django-api-framework))
-
-drf / ninja won't be looked at until I get a different front end put on
-
 ## To-dos!
 
 - debate on auto-migrations
     - on one hand, ease of programming
     - on other hand, could break db if not ready?
     - on original hand, that's the whole point of migrations and test scripts??
-- implement ssn decryption
-- implement on the fly encrypt / decrypt for ssn
+- ! implement on the fly encrypt / decrypt for ssn
 - expand consumer name information
-- add per-consumer debt collected information on accountconsumer
-- logging actions on accounts / consumers
+- ! add per-consumer debt collected information on accountconsumer
 - expand address information
     - currently there's formats that I haven't even seen (ships in the middle of Iowa?)
     - perfected address parsing is a -hard- problem anyways and should be solved by a 3rd party solution, unless that's what we're solving
+- ! encrypt local env file for sensitive values using git-crypt
+- extra data on consumers
+    - name aliases
+    - emails
+    - phones
+- ? make the ingest endpoint not dependent on a named parameter
+- ? add parameter to ingest endpoint to determine if headers are involved
+- ? add parameter to ingest endpoint for custom headers / placements / mapping
+- ? ingest endpoint: add fuzzy matching for status code
+- ingest endpoint: add some processing to account debt value
+    - I noticed that each non-unique debt still lists the value, but from a cursorary glance they're all the same
+- ! add ingest endpoint log mechanism
+    - allows for an UI to be made for users to view file processing
+    - add location uri for ingested file
+    - add async processing
+- ? make ssn hash field unique?
+    - gut instinct is that this makes sense, and we can associate consumer data and make that hash lookup faster
+- fancy json api error pages for api
+- openapi schema generation
+- better admin console for models
+- better __repr__ strings for models
+- !! implement tests for ingestion and utils!
+- !! ensure that a contract exists for the ingestion !!
+- ! different user types for use with the token, and actual permissions
+    - IE only agencies should be able to drop new ingest files into the api

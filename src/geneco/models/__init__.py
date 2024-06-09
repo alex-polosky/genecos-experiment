@@ -1,4 +1,4 @@
-from .account import Account
+from .account import Account, AccountStatus
 from .account_consumer import AccountConsumer
 from .address_lead import AddressLead
 from .agency import Agency

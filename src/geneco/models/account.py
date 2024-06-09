@@ -22,5 +22,4 @@ class Account(BaseModel):
     original_debt = models.DecimalField(max_digits=11, decimal_places=2)
     remaining_debt = models.DecimalField(max_digits=11, decimal_places=2)
 
-    active = models.BooleanField(default=True)
     status = models.PositiveIntegerField(choices=AccountStatus)
