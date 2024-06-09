@@ -1,9 +1,9 @@
 # Console preference
-ipython
-colorlog
+ipython~=8.25
+colorlog~=6.8
 
-cryptography
-cffi
+cryptography~=42.0
+cffi~=1.16
 
 django~=5.0
 djangorestframework~=3.15
