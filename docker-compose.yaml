@@ -33,6 +33,23 @@ services:
     networks:
       - col
 
+  col_api_test:
+    profiles:
+      - test
+    # better to extend col_api or just use different defs?
+    build:
+      context: src
+      dockerfile: Dockerfile
+    working_dir: /
+    command: pytest --color=yes
+    volumes:
+      - ./src:/code
+      - ./test:/test
+      - ./pytest.ini:/pytest.ini
+    env_file: .env
+    networks:
+      - col
+
   # TODO: implement react front-end
   # col_web:
   #   build:

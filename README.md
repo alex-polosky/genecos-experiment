@@ -32,6 +32,10 @@ Note the token value
 
 `curl -X put -H "Authorization: Token $TOKEN" http://localhost:8999/api/v1/contract/00000000-0000-0000-0003-000000000001/ingest/ --form 'file=@"data/consumers_balances.csv"'`
 
+### Running test suite
+
+`docker compose --profile test up -d && docker compose logs --since 0s -f col_api_test`
+
 ## Relation setup
 
 There are multiple entities (TODO: usertypes?):
