@@ -6,6 +6,6 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Build the stack
-              run: docker-compose up -d
+              run: docker compose up -d
             - name: Run tests
               run: docker compose --profile test up -d && docker compose logs --since 0s -f col_api_test
