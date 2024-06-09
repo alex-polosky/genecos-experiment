@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY_TEST }}
       DJANGO_SETTINGS: local
       DJANGO_SETTINGS_MODULE: config.settings
       DB_NAME: postgres

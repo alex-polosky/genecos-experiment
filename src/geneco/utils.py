@@ -14,9 +14,8 @@ def encrypt_ssn(ssn: str | bytes) -> str:
 def decrypt_ssn(ssn: str | bytes) -> str:
     if type(ssn) == str:
         ssn = ssn.encode()
-    return '{s[0:3]}-{s[3:5]}-{s[5:]}'.format(
-        str(int(get_fernet().decrypt(ssn), 16))
-    )
+    decrypted = str(int(get_fernet().decrypt(ssn), 16))
+    return f'{decrypted[0:3]}-{decrypted[3:5]}-{decrypted[5:]}'
 
 def hash_ssn(ssn: str | bytes) -> str:
     if type(ssn) == str:
