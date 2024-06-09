@@ -64,6 +64,10 @@ Found a few packages that -might- work, but everything's woefully out of date
 
 ## To-dos!
 
+### key
+- ! : implement before a "go live"
+- ? : discussion needed
+
 - debate on auto-migrations
     - on one hand, ease of programming
     - on other hand, could break db if not ready?
@@ -99,4 +103,6 @@ Found a few packages that -might- work, but everything's woefully out of date
 - !! ensure that a contract exists for the ingestion !!
 - ! different user types for use with the token, and actual permissions
     - IE only agencies should be able to drop new ingest files into the api
-- ! setup database capable testing
+- ! expand account ingest tests
+    - add error unit tests for parse
+    - add ingest contents tests

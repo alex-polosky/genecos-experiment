@@ -41,7 +41,7 @@ services:
       context: src
       dockerfile: Dockerfile
     working_dir: /
-    command: pytest --color=yes
+    command: pytest --color=yes -vv
     volumes:
       - ./src:/code
       - ./test:/test

@@ -29,8 +29,33 @@ def AccountIngestView(request: Request, contract: UUID) -> Response:
 
     return Response(status=rest_status.HTTP_201_CREATED, data=results)
 
-def ingest_contents(contract: Contract, rows: list) -> dict[str, list[str | list[str]]]:
-    errors: list[str] = []
+def ingest_contents(contract: Contract, rows: list) -> dict[str, list[str | tuple[list[str], list[str]]]]:
+    accounts, consumers, addresses, acc_cons, errors = parse_contents(contract, rows)
+
+    filter_existing_consumers(consumers)
+    filter_existing_addresses(addresses)
+
+    with atomic():
+        try:
+            account_ids = [str(x.pubk) for x in Account.objects.bulk_create(accounts)]
+            consumer_ids = [str(x.pubk) for x in Consumer.objects.bulk_create(consumers)]
+            address_ids = [str(x.pubk) for x in AddressLead.objects.bulk_create(addresses)]
+            acc_con_ids = [str(x.pubk) for x in AccountConsumer.objects.bulk_create(acc_cons)]
+        except Exception as ex:
+            account_ids = consumer_ids = address_ids = acc_con_ids = []
+            errors.append((['server'], ['500']))
+            raise
+
+    return {
+        'accounts': account_ids,
+        'consumers': consumer_ids,
+        'addresses': address_ids,
+        'account_consumers': acc_con_ids,
+        'errors': errors
+    }
+
+def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Account], list[Consumer], list[AddressLead], list[AccountConsumer], list[str | tuple[list[str], list[str]]]]:
+    errors: list[str | tuple[list[str], list[str]]] = []
     accounts: dict[str, Account] = {}  # client ref no
     consumers: dict[str, Consumer] = {}  # ssn
     addresses: dict[str, AddressLead] = {} # address.unique()
@@ -114,27 +139,13 @@ def ingest_contents(contract: Contract, rows: list) -> dict[str, list[str | list
         acid = uuid4()
         acc_cons[acid] = AccountConsumer(pubk=acid, account=account, consumer=consumer)
 
-    filter_existing_consumers(consumers)
-    filter_existing_addresses(addresses)
-
-    with atomic():
-        try:
-            account_ids = [str(x.pubk) for x in Account.objects.bulk_create(accounts.values())]
-            consumer_ids = [str(x.pubk) for x in Consumer.objects.bulk_create(consumers.values())]
-            address_ids = [str(x.pubk) for x in AddressLead.objects.bulk_create(addresses.values())]
-            acc_con_ids = [str(x.pubk) for x in AccountConsumer.objects.bulk_create(acc_cons.values())]
-        except BaseException as ex:
-            account_ids = consumer_ids = address_ids = acc_con_ids = []
-            errors.append('500')
-            raise
-
-    return {
-        'accounts': account_ids,
-        'consumers': consumer_ids,
-        'addresses': address_ids,
-        'account_consumers': acc_con_ids,
-        'errors': errors
-    }
+    return (
+        accounts.values(),
+        consumers.values(),
+        addresses.values(),
+        acc_cons.values(),
+        errors
+    )
 
 def filter_existing_consumers(consumers: dict[str, Consumer]) -> None:
     exist_consumers = Consumer.objects.filter(ssn_hash__in=consumers.keys())
