@@ -1,4 +1,5 @@
 from contextlib import nullcontext as does_not_raise
+import pytest
 
 def test_get_fernet():
     from cryptography.fernet import Fernet
@@ -75,3 +76,22 @@ def test_hash_ssn_urlsafe_b64():
     h = hash_ssn(ssn)
     with does_not_raise(h):
         urlsafe_b64decode(h)
+
+@pytest.mark.parametrize('input,expected',[
+    ('inactive', 1),
+    ('INACTIVE', 1),
+    ('     iNaC tIvE     ', 0),
+    ('paid in full', 2),
+    ('paid in             full            ', 2),
+    ('PAID IN FULL', 2),
+    ('in collection', 4),
+    ('in CollEction', 4),
+    ('oivujwerj', 0),
+])
+def test_status_text_to_value(input, expected):
+    from geneco.utils import status_text_to_value
+    assert status_text_to_value(input) == expected
+
+# TODO!
+def test_filter_queryset_by_request():
+    pass
