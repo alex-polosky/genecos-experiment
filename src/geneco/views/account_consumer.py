@@ -8,10 +8,8 @@ from geneco.utils import StandardPagination
 class AccountConsumerViewSet(viewsets.ModelViewSet):
 
     serializer_class = AccountConsumerSerializer
-    permission_classes = [IsAuthenticated]
     pagination_class = StandardPagination
     lookup_field = 'uuid'
-    # lookup_value_regex = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
     lookup_value_converter = 'uuid'
 
     def get_queryset(self):
