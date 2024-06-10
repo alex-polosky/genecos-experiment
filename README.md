@@ -32,6 +32,17 @@ Note the token value
 
 `curl -X put -H "Authorization: Token $TOKEN" http://localhost:8999/api/v1/contract/00000000-0000-0000-0003-000000000001/ingest/ --form 'file=@"data/consumers_balances.csv"'`
 
+### Viewing loaded data
+
+`data_type`:
+- agency
+- client
+- contract
+- consumer
+- address_lead
+
+`curl -X put -H "Authorization: Token $TOKEN" http://localhost:8999/api/v1/<data_type>/<?:uuid>/`
+
 ### Running test suite
 
 `docker compose --profile test up -d && docker compose logs --since 0s -f col_api_test`
@@ -112,3 +123,6 @@ Found a few packages that -might- work, but everything's woefully out of date
 - ! add RESTful querying (contract/\<uuid>/account/, etc)
 - ! look into [django_filters](https://pypi.org/project/django-filter/) for generic filtering
     - alternatively add generic mix in classes for filtering and ordering
+- ? pretty return account.status?
+- ! tests for all of the views to make sure that they are returning proper data
+- ? add more reverse relational data to serializers

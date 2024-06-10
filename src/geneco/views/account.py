@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from geneco.models.account import Account
 from geneco.serializers.account import AccountSerializer
-from geneco.utils import StandardPagination
+from geneco.utils import StandardPagination, status_text_to_value, filter_queryset_by_request
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -15,13 +15,21 @@ class AccountViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # TODO: ensure proper permissions for access
 
-        username = self.request.query_params.get('username')
-        # filters = {
-        #     'client_reference': '',
-        #     'debt'
-        # }
+        queryset = Account.objects.all().order_by('id')
 
-        return Account.objects.all().order_by('id')
+        filters = {
+            'min_balance': 'balance__gte',
+            'max_balance': 'balance__lte',
+            'consumer_name': 'accountconsumer__consumer__full_name__icontains',
+            'status': 'status'
+        }
+        filter_value_fn = {
+            'status': status_text_to_value
+        }
+
+        queryset = filter_queryset_by_request(queryset, self.request.query_params, filters, filter_value_fn)
+
+        return queryset
 
     def get_permissions(self):
         match self.action:
