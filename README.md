@@ -144,3 +144,6 @@ All commands must be ran in `src` due to context not being able to be changed
 - ? pretty return account.status?
 - ! tests for all of the views to make sure that they are returning proper data
 - ? add more reverse relational data to serializers
+- add additional m2m as needed
+    - agency -> contract <- client
+- flesh out admin

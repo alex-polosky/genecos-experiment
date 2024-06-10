@@ -6,9 +6,17 @@ for model in (
     Agency,
     Client,
     Contract,
-    Account,
+    # Account,
     Consumer,
     AddressLead
 ):
     admin.site.register(model)
 
+
+class ConsumerInline(admin.TabularInline):
+    model = Account.consumers.through
+
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    inlines = (ConsumerInline,)

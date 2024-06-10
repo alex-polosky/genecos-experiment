@@ -12,6 +12,7 @@ class AccountStatus(models.IntegerChoices):
 
 class Account(BaseModel):
     contract = models.ForeignKey('Contract', on_delete=models.PROTECT)
+    consumers = models.ManyToManyField('Consumer', through='AccountConsumer')
 
     # This is represented in the csv as -only- guid, but what if there's a client who utilizes some other id?
     client_reference = models.CharField(max_length=255, unique=True)
