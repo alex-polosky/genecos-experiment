@@ -4,7 +4,7 @@
 
 ## Setup
 
-`git clone [insert link here] && cd [name of repo]`
+`git clone git@github.com:alex-polosky/collections-account-ingest.git && cd collections-account-ingest`
 
 `docker compose build`
 
@@ -72,6 +72,24 @@ Best bet is to encrypt with a key loaded in the env; perfect would be creating a
 
 Found a few packages that -might- work, but everything's woefully out of date
  - https://github.com/chrisclark/django-cryptography
+
+## Deployment
+
+Utilizing supabase for database, fly.io for container
+
+### supabase
+
+### fly.io
+
+All commands must be ran in `src` due to context not being able to be changed
+
+1. Install flyctl
+    - https://fly.io/docs/hands-on/install-flyctl/
+2. Authenticate
+    - `fly auth login`
+4. Deploy
+    - `cd src && fly deploy --ha=false`
+5. Verify we can see everything [live](https://geneco.fly.dev/admin/)
 
 ## To-dos!
 

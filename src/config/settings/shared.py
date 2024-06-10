@@ -96,7 +96,7 @@ REST_FRAMEWORK = {
 }
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/django/static/'
+STATIC_ROOT = '/code/staticfiles/'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 

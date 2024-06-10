@@ -2,6 +2,8 @@ import os
 from .shared import *
 
 match (env := os.environ.get('DJANGO_SETTINGS')):
+    case None:
+        pass
     case 'local':
         from .local import *
     case 'staging':

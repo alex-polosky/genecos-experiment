@@ -1,4 +1,21 @@
-DEBUG = True
+DEBUG = False
+
+ALLOWED_HOSTS = [
+    'geneco.fly.dev'
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://geneco.fly.dev'
+]
+CORS_REPLACE_HTTPS_REFERER = True
+CSRF_COOKIE_DOMAIN = 'geneco.fly.dev'
+CORS_ORIGIN_WHITELIST = (
+    'geneco.fly.dev'
+)
 
 LOGGING = {
     'version': 1,
