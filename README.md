@@ -110,3 +110,5 @@ Found a few packages that -might- work, but everything's woefully out of date
     - add ingest contents tests
 - ? Consider using a mixin for all of the viewsets
 - ! add RESTful querying (contract/\<uuid>/account/, etc)
+- ! look into [django_filters](https://pypi.org/project/django-filter/) for generic filtering
+    - alternatively add generic mix in classes for filtering and ordering

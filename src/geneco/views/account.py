@@ -10,11 +10,17 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     pagination_class = StandardPagination
     lookup_field = 'uuid'
-    # lookup_value_regex = r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
     lookup_value_converter = 'uuid'
 
     def get_queryset(self):
         # TODO: ensure proper permissions for access
+
+        username = self.request.query_params.get('username')
+        # filters = {
+        #     'client_reference': '',
+        #     'debt'
+        # }
+
         return Account.objects.all().order_by('id')
 
     def get_permissions(self):

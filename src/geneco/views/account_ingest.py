@@ -110,8 +110,8 @@ def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[dict[str,
                 contract=contract,
                 client_reference=client_ref,
                 status=status_code,
-                original_debt=balance,
-                remaining_debt=balance
+                debt=balance,
+                balance=balance
             )
             accounts[client_ref] = account
 

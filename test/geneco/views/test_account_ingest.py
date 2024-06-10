@@ -31,10 +31,10 @@ def test_parse_contents():
     )]
 
     accounts = [
-        Account(id=10, uuid=uuid4(), contract=contract, client_reference='0', original_debt=Decimal('123.45'), remaining_debt=Decimal('123.45'), status=AccountStatus.INACTVE.value),
-        Account(id=11, uuid=uuid4(), contract=contract, client_reference='1', original_debt=Decimal('13.45'), remaining_debt=Decimal('13.45'), status=AccountStatus.PAID_IN_FULL.value),
-        Account(id=12, uuid=uuid4(), contract=contract, client_reference='2', original_debt=Decimal('5443.45'), remaining_debt=Decimal('5443.45'), status=AccountStatus.IN_COLLECTION.value),
-        Account(id=13, uuid=uuid4(), contract=contract, client_reference='3', original_debt=Decimal('54.45'), remaining_debt=Decimal('54.45'), status=AccountStatus.IN_COLLECTION.value),
+        Account(id=10, uuid=uuid4(), contract=contract, client_reference='0', debt=Decimal('123.45'), balance=Decimal('123.45'), status=AccountStatus.INACTVE.value),
+        Account(id=11, uuid=uuid4(), contract=contract, client_reference='1', debt=Decimal('13.45'), balance=Decimal('13.45'), status=AccountStatus.PAID_IN_FULL.value),
+        Account(id=12, uuid=uuid4(), contract=contract, client_reference='2', debt=Decimal('5443.45'), balance=Decimal('5443.45'), status=AccountStatus.IN_COLLECTION.value),
+        Account(id=13, uuid=uuid4(), contract=contract, client_reference='3', debt=Decimal('54.45'), balance=Decimal('54.45'), status=AccountStatus.IN_COLLECTION.value),
     ]
     consumers = [
         Consumer(id=10, uuid=uuid4(), full_name='josh', ssn='1', ssn_hash='1'),

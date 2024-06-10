@@ -19,7 +19,7 @@ class Account(BaseModel):
     # Money management is it's own whole can of worms.
     # TODO: expand debt_owed to allow different currencies, possibly utilizing a table of ISO 4217 codes and active dates to account for minor unit changes
     # As it is now, I think if an account owes >= $1b there's bigger problems?
-    original_debt = models.DecimalField(max_digits=11, decimal_places=2)
-    remaining_debt = models.DecimalField(max_digits=11, decimal_places=2)
+    debt = models.DecimalField(max_digits=11, decimal_places=2)
+    balance = models.DecimalField(max_digits=11, decimal_places=2)
 
     status = models.PositiveIntegerField(choices=AccountStatus)

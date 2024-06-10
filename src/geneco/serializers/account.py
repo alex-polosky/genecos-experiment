@@ -22,8 +22,8 @@ class AccountSerializer(serializers.ModelSerializer):
             'created',
             'updated',
             'client_reference',
-            'original_debt',
-            'remaining_debt',
+            'debt',
+            'balance',
             'status',
             'contract',
             'consumers'
