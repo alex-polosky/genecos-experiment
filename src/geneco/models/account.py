@@ -1,6 +1,6 @@
-from ._base import BaseModel
 from django.db import models
 from django.utils.translation import gettext as _
+from geneco.models._base import BaseModel
 
 
 class AccountStatus(models.IntegerChoices):

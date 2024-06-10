@@ -1,5 +1,5 @@
-from ._base import BaseModel
 from django.db import models
+from geneco.models._base import BaseModel
 
 
 class Client(BaseModel):

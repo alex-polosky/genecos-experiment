@@ -5,6 +5,7 @@ import hashlib
 from rest_framework.pagination import PageNumberPagination
 from geneco.models.account import AccountStatus
 
+
 def get_fernet() -> Fernet:
     return Fernet(settings.FERNET_KEY)
 

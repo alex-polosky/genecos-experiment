@@ -3,6 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import SimpleRouter
 from geneco import views
 
+
 router = SimpleRouter()
 router.register('agency', views.AgencyViewSet, basename='agencies')
 router.register('contract', views.ContractViewSet, basename='contracts')

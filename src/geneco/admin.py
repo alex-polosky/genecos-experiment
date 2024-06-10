@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from geneco.models import Account, AddressLead, Agency, Client, Consumer, Contract
 
 
 for model in (

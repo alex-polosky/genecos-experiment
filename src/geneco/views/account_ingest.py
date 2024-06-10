@@ -11,8 +11,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status as rest_status
-from ..models import *
-from ..utils import encrypt_ssn, hash_ssn
+from geneco.models import Account, AccountConsumer, AccountStatus, AddressLead, Consumer, Contract
+from geneco.utils import encrypt_ssn, hash_ssn
 
 
 @api_view(['PUT'])
