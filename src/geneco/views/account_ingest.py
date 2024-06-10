@@ -19,7 +19,7 @@ from ..utils import encrypt_ssn, hash_ssn
 @parser_classes([MultiPartParser])
 def AccountIngestView(request: Request, contract: UUID) -> Response:
     try:
-        contract_obj = Contract.objects.get(pubk=contract)
+        contract_obj = Contract.objects.get(uuid=contract)
     except Contract.DoesNotExist:
         pass
 
@@ -37,10 +37,10 @@ def ingest_contents(contract: Contract, rows: list) -> dict[str, list[str | tupl
 
     with atomic():
         try:
-            account_ids = [str(x.pubk) for x in Account.objects.bulk_create(accounts)]
-            consumer_ids = [str(x.pubk) for x in Consumer.objects.bulk_create(consumers)]
-            address_ids = [str(x.pubk) for x in AddressLead.objects.bulk_create(addresses)]
-            acc_con_ids = [str(x.pubk) for x in AccountConsumer.objects.bulk_create(acc_cons)]
+            account_ids = [str(x.uuid) for x in Account.objects.bulk_create(accounts.values())]
+            consumer_ids = [str(x.uuid) for x in Consumer.objects.bulk_create(consumers.values())]
+            address_ids = [str(x.uuid) for x in AddressLead.objects.bulk_create(addresses.values())]
+            acc_con_ids = [str(x.uuid) for x in AccountConsumer.objects.bulk_create(acc_cons.values())]
         except Exception as ex:
             account_ids = consumer_ids = address_ids = acc_con_ids = []
             errors.append((['server'], ['500']))
@@ -54,12 +54,12 @@ def ingest_contents(contract: Contract, rows: list) -> dict[str, list[str | tupl
         'errors': errors
     }
 
-def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Account], list[Consumer], list[AddressLead], list[AccountConsumer], list[str | tuple[list[str], list[str]]]]:
+def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[dict[str, Account], dict[str, Consumer], dict[str, AddressLead], dict[UUID, AccountConsumer], list[str | tuple[list[str], list[str]]]]:
     errors: list[str | tuple[list[str], list[str]]] = []
     accounts: dict[str, Account] = {}  # client ref no
     consumers: dict[str, Consumer] = {}  # ssn
     addresses: dict[str, AddressLead] = {} # address.unique()
-    acc_cons: dict[UUID, AccountConsumer] = {} # pubk
+    acc_cons: dict[UUID, AccountConsumer] = {} # uuid
 
     # Assume header
     used_header = False
@@ -106,7 +106,7 @@ def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Acco
         else:
             # process balance / status only once; check README for why
             account = Account(
-                pubk = uuid4(),
+                uuid = uuid4(),
                 contract=contract,
                 client_reference=client_ref,
                 status=status_code,
@@ -119,7 +119,7 @@ def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Acco
             consumer = consumers[ssn_hashed]
         else:
             consumer = Consumer(
-                pubk = uuid4(),
+                uuid = uuid4(),
                 full_name=name,
                 ssn=ssn_enced,
                 ssn_hash=ssn_hashed
@@ -127,7 +127,7 @@ def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Acco
             consumers[ssn_hashed] = consumer
 
         lead = AddressLead(
-            pubk=uuid4(),
+            uuid=uuid4(),
             consumer=consumer,
             line1=line1,
             line2=line2,
@@ -137,13 +137,13 @@ def parse_contents(contract: Contract, rows: list[list[str]]) -> tuple[list[Acco
             addresses[lead_hash] = lead
 
         acid = uuid4()
-        acc_cons[acid] = AccountConsumer(pubk=acid, account=account, consumer=consumer)
+        acc_cons[acid] = AccountConsumer(uuid=acid, account=account, consumer=consumer)
 
     return (
-        accounts.values(),
-        consumers.values(),
-        addresses.values(),
-        acc_cons.values(),
+        accounts,
+        consumers,
+        addresses,
+        acc_cons,
         errors
     )
 
@@ -156,12 +156,12 @@ def filter_existing_consumers(consumers: dict[str, Consumer]) -> None:
         del consumers[consumer.ssn_hash]
 
 def filter_existing_addresses(addresses: dict[str, AddressLead]) -> None:
-    # When the consumers get refreshed from the db, their pubk are updated,
-    # and the pubk is part of what makes the unique address,
-    # so we need access to both the crafted and db pubk
+    # When the consumers get refreshed from the db, their uuid are updated,
+    # and the uuid is part of what makes the unique address,
+    # so we need access to both the crafted and db uuid
     new_uniques = {v.unique(): (old_key ,v) for (old_key, v) in addresses.items()}
     exist_addresses = AddressLead.objects.annotate(
-        adds=Concat(F('consumer__pubk'), F('line1'), F('line2'), output_field=TextField())
+        adds=Concat(F('consumer__uuid'), F('line1'), F('line2'), output_field=TextField())
     ).filter(adds__in=new_uniques.keys())
     for address in exist_addresses:
         this_address = new_uniques[address.unique()][1]

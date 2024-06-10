@@ -10,4 +10,4 @@ class AddressLead(BaseModel):
     line2 = models.TextField()
 
     def unique(self):
-        return str(self.consumer.pubk) + self.line1 + self.line2
+        return str(self.consumer.uuid) + self.line1 + self.line2

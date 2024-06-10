@@ -31,28 +31,28 @@ def test_parse_contents():
     )]
 
     accounts = [
-        Account(id=10, pubk=uuid4(), contract=contract, client_reference='0', original_debt=Decimal('123.45'), remaining_debt=Decimal('123.45'), status=AccountStatus.INACTVE.value),
-        Account(id=11, pubk=uuid4(), contract=contract, client_reference='1', original_debt=Decimal('13.45'), remaining_debt=Decimal('13.45'), status=AccountStatus.PAID_IN_FULL.value),
-        Account(id=12, pubk=uuid4(), contract=contract, client_reference='2', original_debt=Decimal('5443.45'), remaining_debt=Decimal('5443.45'), status=AccountStatus.IN_COLLECTION.value),
-        Account(id=13, pubk=uuid4(), contract=contract, client_reference='3', original_debt=Decimal('54.45'), remaining_debt=Decimal('54.45'), status=AccountStatus.IN_COLLECTION.value),
+        Account(id=10, uuid=uuid4(), contract=contract, client_reference='0', original_debt=Decimal('123.45'), remaining_debt=Decimal('123.45'), status=AccountStatus.INACTVE.value),
+        Account(id=11, uuid=uuid4(), contract=contract, client_reference='1', original_debt=Decimal('13.45'), remaining_debt=Decimal('13.45'), status=AccountStatus.PAID_IN_FULL.value),
+        Account(id=12, uuid=uuid4(), contract=contract, client_reference='2', original_debt=Decimal('5443.45'), remaining_debt=Decimal('5443.45'), status=AccountStatus.IN_COLLECTION.value),
+        Account(id=13, uuid=uuid4(), contract=contract, client_reference='3', original_debt=Decimal('54.45'), remaining_debt=Decimal('54.45'), status=AccountStatus.IN_COLLECTION.value),
     ]
     consumers = [
-        Consumer(id=10, pubk=uuid4(), full_name='josh', ssn='1', ssn_hash='1'),
-        Consumer(id=11, pubk=uuid4(), full_name='jane', ssn='2', ssn_hash='2'),
-        Consumer(id=12, pubk=uuid4(), full_name='blarn', ssn='3', ssn_hash='3'),
+        Consumer(id=10, uuid=uuid4(), full_name='josh', ssn='1', ssn_hash='1'),
+        Consumer(id=11, uuid=uuid4(), full_name='jane', ssn='2', ssn_hash='2'),
+        Consumer(id=12, uuid=uuid4(), full_name='blarn', ssn='3', ssn_hash='3'),
     ]
     leads = [
-        AddressLead(id=10, pubk=uuid4(), consumer=consumers[0], reported=reported, line1='that one place', line2=''),
-        AddressLead(id=11, pubk=uuid4(), consumer=consumers[1], reported=reported, line1='that one place', line2='down the road'),
-        AddressLead(id=12, pubk=uuid4(), consumer=consumers[2], reported=reported, line1='ya know', line2=''),
-        AddressLead(id=13, pubk=uuid4(), consumer=consumers[0], reported=reported, line1='ya know', line2=''),
+        AddressLead(id=10, uuid=uuid4(), consumer=consumers[0], reported=reported, line1='that one place', line2=''),
+        AddressLead(id=11, uuid=uuid4(), consumer=consumers[1], reported=reported, line1='that one place', line2='down the road'),
+        AddressLead(id=12, uuid=uuid4(), consumer=consumers[2], reported=reported, line1='ya know', line2=''),
+        AddressLead(id=13, uuid=uuid4(), consumer=consumers[0], reported=reported, line1='ya know', line2=''),
     ]
     acc_cons = [
-        AccountConsumer(id=10, pubk=uuid4(), account=accounts[0], consumer=consumers[0]),
-        AccountConsumer(id=12, pubk=uuid4(), account=accounts[1], consumer=consumers[1]),
-        AccountConsumer(id=10, pubk=uuid4(), account=accounts[2], consumer=consumers[2]),
-        AccountConsumer(id=10, pubk=uuid4(), account=accounts[2], consumer=consumers[0]),
-        AccountConsumer(id=10, pubk=uuid4(), account=accounts[3], consumer=consumers[0]),
+        AccountConsumer(id=10, uuid=uuid4(), account=accounts[0], consumer=consumers[0]),
+        AccountConsumer(id=12, uuid=uuid4(), account=accounts[1], consumer=consumers[1]),
+        AccountConsumer(id=10, uuid=uuid4(), account=accounts[2], consumer=consumers[2]),
+        AccountConsumer(id=10, uuid=uuid4(), account=accounts[2], consumer=consumers[0]),
+        AccountConsumer(id=10, uuid=uuid4(), account=accounts[3], consumer=consumers[0]),
     ]
 
     expected = [
@@ -64,7 +64,7 @@ def test_parse_contents():
     ]
 
     from geneco.views.account_ingest import parse_contents
-    actual = parse_contents(contract, incoming)
+    actual = [x.values() if type(x) == dict else x for x in parse_contents(contract, incoming)]
 
     normalize = lambda obj: [[normalize_for_compare(y) for y in x] for x in obj]
     assert normalize(expected) == normalize(actual)
@@ -83,10 +83,10 @@ def test_filter_existing_consumers():
         x.id = None
 
     new_consumers = [
-        Consumer(pubk=uuid4(), full_name='Abe Cool', ssn='10', ssn_hash='10'),
-        Consumer(pubk=uuid4(), full_name='Bob Cool', ssn='11', ssn_hash='11'),
-        Consumer(pubk=uuid4(), full_name='Cat Cool', ssn='12', ssn_hash='12'),
-        Consumer(pubk=uuid4(), full_name='Dog Cool', ssn='13', ssn_hash='13'),
+        Consumer(uuid=uuid4(), full_name='Abe Cool', ssn='10', ssn_hash='10'),
+        Consumer(uuid=uuid4(), full_name='Bob Cool', ssn='11', ssn_hash='11'),
+        Consumer(uuid=uuid4(), full_name='Cat Cool', ssn='12', ssn_hash='12'),
+        Consumer(uuid=uuid4(), full_name='Dog Cool', ssn='13', ssn_hash='13'),
     ]
 
     incoming = {
@@ -115,9 +115,9 @@ def test_filter_existing_addresses():
     ]
 
     new_leads = [
-        AddressLead(pubk=uuid4(), consumer=con, reported=reported, line1='new line1'),
-        AddressLead(pubk=uuid4(), consumer=Consumer(pubk=uuid4(), full_name='Abe Cool', ssn='10', ssn_hash='10'), reported=reported, line1='new line1'),
-        AddressLead(pubk=uuid4(), consumer=Consumer(pubk=uuid4(), full_name='Bob Cool', ssn='11', ssn_hash='11'), reported=reported, line1='next'),
+        AddressLead(uuid=uuid4(), consumer=con, reported=reported, line1='new line1'),
+        AddressLead(uuid=uuid4(), consumer=Consumer(uuid=uuid4(), full_name='Abe Cool', ssn='10', ssn_hash='10'), reported=reported, line1='new line1'),
+        AddressLead(uuid=uuid4(), consumer=Consumer(uuid=uuid4(), full_name='Bob Cool', ssn='11', ssn_hash='11'), reported=reported, line1='next'),
     ]
 
     incoming = {

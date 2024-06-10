@@ -6,7 +6,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-    pubk = models.UUIDField(unique=True, default=uuid.uuid4, blank=False, null=False)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, blank=False, null=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

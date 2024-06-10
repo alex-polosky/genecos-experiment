@@ -68,6 +68,8 @@ Found a few packages that -might- work, but everything's woefully out of date
 - ! : implement before a "go live"
 - ? : discussion needed
 
+---
+
 - debate on auto-migrations
     - on one hand, ease of programming
     - on other hand, could break db if not ready?
@@ -106,3 +108,5 @@ Found a few packages that -might- work, but everything's woefully out of date
 - ! expand account ingest tests
     - add error unit tests for parse
     - add ingest contents tests
+- ? Consider using a mixin for all of the viewsets
+- ! add RESTful querying (contract/\<uuid>/account/, etc)

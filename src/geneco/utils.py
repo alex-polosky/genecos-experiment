@@ -1,7 +1,8 @@
 import base64
 from cryptography.fernet import Fernet
-import hashlib
 from django.conf import settings
+import hashlib
+from rest_framework.pagination import PageNumberPagination
 
 def get_fernet() -> Fernet:
     return Fernet(settings.FERNET_KEY)
@@ -21,3 +22,8 @@ def hash_ssn(ssn: str | bytes) -> str:
     if type(ssn) == str:
         ssn = ssn.encode()
     return base64.urlsafe_b64encode(hashlib.sha256(ssn).digest()).decode('utf-8')
+
+class StandardPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000

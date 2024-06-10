@@ -27,7 +27,7 @@ def gen_id(instance: BaseModel) -> BaseModel:
     _ID_MAP[type_id] += 1
     id_ = _ID_MAP[type_id]
 
-    instance.pubk = uuid.UUID(f'{{00000000-0000-0000-{str(type_id).rjust(4, "0")}-{str(id_).rjust(12, "0")}}}')
+    instance.uuid = uuid.UUID(f'{{00000000-0000-0000-{str(type_id).rjust(4, "0")}-{str(id_).rjust(12, "0")}}}')
 
     return instance
 
@@ -46,7 +46,7 @@ def normalize_for_compare(obj: object) -> dict:
                     continue
                 for rel, rel_obj in cache.items():
                     normed[rel] = normalize_for_compare(rel_obj)
-            case 'id' | 'pubk' | 'created' | 'updated' | 'reported':
+            case 'id' | 'uuid' | 'created' | 'updated' | 'reported':
                 continue
             case s if s.endswith('_id'):
                 continue
